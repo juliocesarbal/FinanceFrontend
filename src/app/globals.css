@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/*
+ * Tema oscuro único del dashboard financiero.
+ * Paleta de datos validada con el validador de dataviz (modo dark,
+ * superficie #1a1a19): slots categóricos, estados y tinta.
+ */
+@theme {
+  --color-surface-0: #0d0d0d; /* plano de página */
+  --color-surface-1: #1a1a19; /* tarjetas / superficie de gráficos */
+  --color-surface-2: #242422; /* hover / insets */
+  --color-ink: #ffffff;
+  --color-ink-2: #c3c2b7;
+  --color-muted: #898781;
+  --color-grid: #2c2c2a;
+  --color-baseline: #383835;
+  --color-line: rgba(255, 255, 255, 0.1);
+
+  /* slots categóricos (dark) — orden fijo, nunca ciclar */
+  --color-s1: #3987e5; /* azul */
+  --color-s2: #199e70; /* aqua */
+  --color-s3: #c98500; /* amarillo */
+  --color-s4: #008300; /* verde */
+  --color-s5: #9085e9; /* violeta */
+  --color-s6: #e66767; /* rojo */
+
+  /* estados (reservados, nunca como series) */
+  --color-good: #0ca30c;
+  --color-warn: #fab219;
+  --color-serious: #ec835a;
+  --color-critical: #d03b3b;
+  /* rojo legible para texto sobre superficie oscura */
+  --color-critical-text: #e66767;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-surface-0);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* números alineables en tablas y ejes */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* barra de desplazamiento discreta */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #383835 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #383835;
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
