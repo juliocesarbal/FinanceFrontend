@@ -23,7 +23,7 @@ export function HBarList({
   }
   const cap = Math.max(max, ...items.map((i) => i.value));
   return (
-    <ul className="space-y-2">
+    <ul className="flex flex-col gap-3">
       {items.map((item) => (
         <li key={item.label}>
           <div className="mb-0.5 flex items-baseline justify-between gap-2 text-xs">

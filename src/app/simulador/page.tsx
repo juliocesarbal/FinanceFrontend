@@ -14,6 +14,7 @@ import {
   Button,
   Card,
   ErrorBox,
+  PageHeader,
   Spinner,
   Stat,
 } from "@/components/ui/primitives";
@@ -26,13 +27,7 @@ export default function SimuladorPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-lg font-bold tracking-tight">Simulador</h1>
-        <p className="text-xs text-muted">
-          Escenarios hipotéticos y backtesting — estimaciones estadísticas, jamás
-          garantías (sección 20)
-        </p>
-      </div>
+      <PageHeader eyebrow="Laboratorio de escenarios" title="Simulador" description="Modelá aportes y contrastá estrategias históricas. Los resultados son estimaciones estadísticas, no garantías." />
 
       <Tabs<TabKey>
         value={tab}

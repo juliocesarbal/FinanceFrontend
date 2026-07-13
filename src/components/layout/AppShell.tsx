@@ -1,11 +1,8 @@
-/** Cáscara de la app con guardia de sesión.
- *  - "/" es la landing pública: se renderiza sin cromo y sin exigir sesión.
- *  - /login y /register se renderizan centradas; con sesión redirigen a /dashboard.
- *  - Todo lo demás exige sesión y lleva el cromo (sidebar + topbar). */
+/** Cáscara de la app con guardia de sesión y navegación responsive. */
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
@@ -20,6 +17,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const session = useSession();
+  const [navigationOpen, setNavigationOpen] = useState(false);
 
   const isLanding = pathname === LANDING_ROUTE;
   const isAuthRoute = AUTH_ROUTES.has(pathname);
@@ -27,44 +25,39 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (session.isPending || isLanding) return;
-    // Sin sesión: a la landing con el modal de login abierto.
     if (!authenticated && !isAuthRoute) router.replace("/?auth=login");
     else if (authenticated && isAuthRoute) router.replace("/dashboard");
   }, [session.isPending, authenticated, isAuthRoute, isLanding, router]);
 
-  // Landing: página completa, maneja su propio layout y footer.
-  if (isLanding) {
-    return <>{children}</>;
-  }
+  useEffect(() => setNavigationOpen(false), [pathname]);
+
+  if (isLanding) return <>{children}</>;
 
   if (isAuthRoute) {
-    return (
-      <main className="flex min-h-screen items-center justify-center px-4 py-8">
-        {children}
-      </main>
-    );
+    return <main className="flex min-h-screen items-center justify-center px-4 py-8">{children}</main>;
   }
 
   if (session.isPending || !authenticated) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-sm text-muted">
-        <Spinner className="h-5 w-5" />
-        {session.isError
-          ? "No se pudo consultar la sesión. ¿Está corriendo el backend?"
-          : "Verificando sesión…"}
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-sm text-muted" role="status" aria-live="polite">
+        <Spinner className="size-5" />
+        {session.isError ? "No se pudo consultar la sesión. ¿Está corriendo el backend?" : "Verificando sesión…"}
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 md:px-6">
+    <div className="min-h-screen bg-surface-0">
+      <a href="#contenido-principal" className="fixed left-3 top-3 z-50 -translate-y-20 rounded-lg bg-s1 px-3 py-2 font-semibold text-ink transition-transform focus:translate-y-0">
+        Saltar al contenido
+      </a>
+      <Sidebar open={navigationOpen} onClose={() => setNavigationOpen(false)} />
+      <div className="min-w-0 md:pl-64">
+        <Topbar onMenu={() => setNavigationOpen(true)} />
+        <main id="contenido-principal" tabIndex={-1} className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           {children}
         </main>
-        <footer className="border-t border-grid px-4 py-3 text-center text-[11px] text-muted md:px-6">
+        <footer className="border-t border-line px-4 py-4 text-center text-xs leading-relaxed text-muted sm:px-6">
           {DISCLAIMER}
         </footer>
       </div>

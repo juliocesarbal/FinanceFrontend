@@ -20,15 +20,23 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Finance — Radar de inversiones",
+  title: {
+    default: "Finance — Radar de inversiones",
+    template: "%s | Finance",
+  },
   description:
-    "Dashboard del Sistema Inteligente de Análisis, Simulación y Descubrimiento de Inversiones",
+    "Sistema inteligente de análisis, simulación y descubrimiento de inversiones.",
+};
+
+export const viewport = {
+  themeColor: "#090b0f",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
+    <html lang="es" className="bg-surface-0">
+      <body className={`${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans`}>
         <Providers>
           <AppShell>{children}</AppShell>
         </Providers>

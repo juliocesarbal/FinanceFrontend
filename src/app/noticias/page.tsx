@@ -8,7 +8,7 @@ import { useNews } from "@/lib/queries";
 
 import { NewsList } from "@/components/news/NewsList";
 import { Input, Select } from "@/components/ui/forms";
-import { Card, ErrorBox, Loading } from "@/components/ui/primitives";
+import { Card, ErrorBox, Loading, PageHeader } from "@/components/ui/primitives";
 
 export default function NoticiasPage() {
   const [ticker, setTicker] = useState("");
@@ -24,13 +24,7 @@ export default function NoticiasPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-lg font-bold tracking-tight">Noticias</h1>
-        <p className="text-xs text-muted">
-          Ingesta yfinance + Google News RSS con sentimiento, impacto y confiabilidad
-          de fuente (secciones 4.4 y 9)
-        </p>
-      </div>
+      <PageHeader eyebrow="Inteligencia de contexto" title="Noticias" description="Cobertura financiera clasificada por sentimiento, impacto y confiabilidad de la fuente." />
 
       <Card
         title="Feed"

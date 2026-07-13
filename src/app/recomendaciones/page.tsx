@@ -17,6 +17,7 @@ import {
   EmptyState,
   ErrorBox,
   Loading,
+  PageHeader,
   ScoreChip,
   Spinner,
   Table,
@@ -38,15 +39,11 @@ export default function RecomendacionesPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-lg font-bold tracking-tight">Recomendaciones</h1>
-          <p className="text-xs text-muted">
-            Pipeline en dos etapas: score mecánico sobre todo el universo → agente solo
-            en el top N (secciones 5.1–5.3)
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <PageHeader
+        eyebrow="Motor de señales"
+        title="Recomendaciones"
+        description="Ranking auditable en dos etapas: score mecánico para todo el universo y análisis del agente sobre las mejores oportunidades."
+        actions={<div className="flex flex-wrap items-center gap-2">
           <Button
             onClick={() => runScoring.mutate(false)}
             disabled={runScoring.isPending}
@@ -62,8 +59,8 @@ export default function RecomendacionesPage() {
           >
             {runScoring.isPending ? <Spinner /> : "Scoring + escalar al agente"}
           </Button>
-        </div>
-      </div>
+        </div>}
+      />
 
       {runScoring.isError && <ErrorBox error={runScoring.error} />}
       {runScoring.isPending && (

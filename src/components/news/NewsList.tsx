@@ -21,26 +21,27 @@ export function NewsList({ items }: { items: NewsItem[] }) {
     );
   }
   return (
-    <ul className="divide-y divide-grid">
+    <ul className="flex flex-col divide-y divide-grid">
       {items.map((n) => (
-        <li key={n.id} className="py-3">
-          <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
-            <a
-              href={n.url || undefined}
-              target="_blank"
-              rel="noreferrer"
-              className="min-w-0 flex-1 text-sm font-medium text-ink hover:text-s1 hover:underline"
-            >
-              {n.title}
-            </a>
-            <span className="shrink-0 text-[11px] text-muted">
-              {n.source || "fuente desconocida"} · {timeAgo(n.published_at)}
-            </span>
-          </div>
-          {n.summary && (
-            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-2">{n.summary}</p>
-          )}
-          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        <li key={n.id} className="group py-4 first:pt-0 last:pb-0">
+          <article className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+              <a
+                href={n.url || undefined}
+                target="_blank"
+                rel="noreferrer"
+                className="min-w-0 flex-1 text-pretty text-sm font-semibold leading-relaxed text-ink decoration-s1 underline-offset-4 hover:text-s1 hover:underline"
+              >
+                {n.title}
+              </a>
+              <span className="shrink-0 text-[11px] text-muted">
+                {n.source || "fuente desconocida"} · {timeAgo(n.published_at)}
+              </span>
+            </div>
+            {n.summary && (
+              <p className="line-clamp-2 max-w-4xl text-xs leading-relaxed text-ink-2">{n.summary}</p>
+            )}
+            <div className="flex flex-wrap items-center gap-1.5">
             <Badge tone={SENTIMENT_META[n.sentiment_label]?.tone ?? "neutral"}>
               {SENTIMENT_META[n.sentiment_label]?.label ?? n.sentiment_label}
               <span className="num opacity-70">{fmtNum(n.sentiment, 2)}</span>
@@ -57,7 +58,8 @@ export function NewsList({ items }: { items: NewsItem[] }) {
                 fuente {n.reliability_level}
               </Badge>
             )}
-          </div>
+            </div>
+          </article>
         </li>
       ))}
     </ul>
