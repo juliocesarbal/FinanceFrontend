@@ -10,18 +10,21 @@ import { useState, type ReactNode } from "react";
 
 import { ApiError } from "@/lib/api";
 
-const AUTH_PATHS = ["/login", "/register"];
+/** Rutas donde un 401 NO debe redirigir: la landing (el login es un modal
+ *  ahí — un intento fallido devuelve 401 y debe mostrarse en el form) y los
+ *  stubs de compatibilidad. */
+const SKIP_401_PATHS = ["/", "/login", "/register"];
 
-/** Sesión vencida a mitad de uso: cualquier 401 manda al login
- *  (salvo que ya estemos ahí, p. ej. un login con credenciales malas). */
+/** Sesión vencida a mitad de uso: cualquier 401 manda a la landing con el
+ *  modal de login abierto. */
 function redirectOn401(err: unknown) {
   if (
     err instanceof ApiError &&
     err.status === 401 &&
     typeof window !== "undefined" &&
-    !AUTH_PATHS.includes(window.location.pathname)
+    !SKIP_401_PATHS.includes(window.location.pathname)
   ) {
-    window.location.assign("/login");
+    window.location.assign("/?auth=login");
   }
 }
 

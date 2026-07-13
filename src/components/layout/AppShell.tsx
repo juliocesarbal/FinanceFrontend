@@ -1,5 +1,7 @@
-/** Cáscara de la app con guardia de sesión: exige login para todo el
- *  dashboard; /login y /register se renderizan sin cromo y sin sesión. */
+/** Cáscara de la app con guardia de sesión.
+ *  - "/" es la landing pública: se renderiza sin cromo y sin exigir sesión.
+ *  - /login y /register se renderizan centradas; con sesión redirigen a /dashboard.
+ *  - Todo lo demás exige sesión y lleva el cromo (sidebar + topbar). */
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -12,20 +14,28 @@ import { DISCLAIMER } from "@/lib/meta";
 import { useSession } from "@/lib/queries";
 
 const AUTH_ROUTES = new Set(["/login", "/register"]);
+const LANDING_ROUTE = "/";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const session = useSession();
 
+  const isLanding = pathname === LANDING_ROUTE;
   const isAuthRoute = AUTH_ROUTES.has(pathname);
   const authenticated = session.data?.authenticated === true;
 
   useEffect(() => {
-    if (session.isPending) return;
-    if (!authenticated && !isAuthRoute) router.replace("/login");
-    else if (authenticated && isAuthRoute) router.replace("/");
-  }, [session.isPending, authenticated, isAuthRoute, router]);
+    if (session.isPending || isLanding) return;
+    // Sin sesión: a la landing con el modal de login abierto.
+    if (!authenticated && !isAuthRoute) router.replace("/?auth=login");
+    else if (authenticated && isAuthRoute) router.replace("/dashboard");
+  }, [session.isPending, authenticated, isAuthRoute, isLanding, router]);
+
+  // Landing: página completa, maneja su propio layout y footer.
+  if (isLanding) {
+    return <>{children}</>;
+  }
 
   if (isAuthRoute) {
     return (

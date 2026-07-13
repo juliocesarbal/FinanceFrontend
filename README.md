@@ -41,8 +41,9 @@ otra dirección, copiá `.env.example` a `.env` y ajustá `BACKEND_URL`.
 
 | Ruta | Contenido |
 |---|---|
-| `/login` · `/register` | Inicio de sesión y alta de cuenta (email + contraseña). El resto del dashboard exige sesión: sin login se redirige acá |
-| `/` | Dashboard: salud del sistema (incl. métrica 429 de yfinance), top del ranking, watchlist, últimas noticias |
+| `/` | Landing pública (estilo COMPUTE: video, serif display, métricas en vivo) con botón de acceso en la esquina. Login/registro abren en un **modal translúcido** sobre la landing (`?auth=login\|register`) |
+| `/login` · `/register` | Stubs de compatibilidad: redirigen a la landing con el modal abierto |
+| `/dashboard` | Dashboard: salud del sistema (incl. métrica 429 de yfinance), top del ranking, watchlist, últimas noticias |
 | `/mercado` | Universo de activos, filtro por tipo, alta de tickers nuevos |
 | `/mercado/[ticker]` | Velas + SMA 20/50/200 + volumen, y pestañas: técnico (RSI/MACD), fundamentales (5 bloques de la sección 4.3), noticias, consenso de analistas, riesgo, recomendación |
 | `/recomendaciones` | Ranking mecánico vs. agente con divergencia y contradicciones; botones para correr el scoring (etapa 1) y escalar al agente (etapa 2) |

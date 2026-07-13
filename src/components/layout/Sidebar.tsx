@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { DISCLAIMER } from "@/lib/meta";
 
 const NAV = [
-  { href: "/", label: "Dashboard", icon: IconGrid },
+  { href: "/dashboard", label: "Dashboard", icon: IconGrid },
   { href: "/mercado", label: "Mercado", icon: IconTrend },
   { href: "/recomendaciones", label: "Recomendaciones", icon: IconTarget },
   { href: "/cartera", label: "Cartera", icon: IconPie },
@@ -18,12 +18,11 @@ const NAV = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => pathname.startsWith(href);
 
   return (
     <aside className="flex shrink-0 flex-col border-line max-md:border-b md:h-screen md:w-60 md:border-r md:sticky md:top-0">
-      <div className="flex items-center gap-2 px-4 py-4">
+      <Link href="/" className="flex items-center gap-2 px-4 py-4" title="Ir a la portada">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-s1/15 text-s1">
           <IconLogo />
         </span>
@@ -31,7 +30,7 @@ export function Sidebar() {
           <div className="text-sm font-bold tracking-tight">Finance</div>
           <div className="text-[10px] text-muted">Radar de inversiones</div>
         </div>
-      </div>
+      </Link>
 
       <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-1 md:flex-col md:overflow-visible">
         {NAV.map(({ href, label, icon: Icon }) => (

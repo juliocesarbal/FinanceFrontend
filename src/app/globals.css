@@ -33,15 +33,51 @@
   --color-critical-text: #e66767;
 
   --font-sans: system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
+  /* landing: serif display + mono técnica (cargadas vía next/font en layout) */
+  --font-display: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 :root {
   color-scheme: dark;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   height: 100%;
+}
+
+/* ------------------------------------------------ utilidades de la landing */
+.text-stroke {
+  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+.marquee {
+  animation: marquee 32s linear infinite;
+}
+.marquee-reverse {
+  animation: marquee-reverse 26s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-step-progress {
+  animation: step-progress 6s linear forwards;
+}
+@keyframes step-progress {
+  from { width: 0%; }
+  to { width: 100%; }
 }
 
 body {
