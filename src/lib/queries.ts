@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-query";
 
 import { api, qs } from "./api";
+import { useUiStore } from "./store";
 import type {
   AgentReview,
   Asset,
@@ -20,6 +21,7 @@ import type {
   BacktestResult,
   Concentration,
   Consensus,
+  CredentialsIn,
   DiscoveryRun,
   Health,
   IndicatorRow,
@@ -37,12 +39,61 @@ import type {
   Rebalance,
   Recommendation,
   ScoringRun,
+  SessionInfo,
   SimulationIn,
   SimulationResult,
   Statement,
   TechnicalSnapshot,
   Topic,
+  User,
 } from "./types";
+
+// ---------------------------------------------------------------- auth
+const SESSION_KEY = ["session"];
+
+/** Sesión actual. También siembra la cookie CSRF (el backend la setea en /auth/me). */
+export function useSession() {
+  return useQuery({
+    queryKey: SESSION_KEY,
+    queryFn: () => api.get<SessionInfo>("/auth/me"),
+    staleTime: 5 * 60_000,
+    retry: 0,
+  });
+}
+
+/** Al entrar o salir un usuario no puede quedar caché del anterior. */
+function useResetOnAuthChange() {
+  const qc = useQueryClient();
+  return (user: User | null) => {
+    qc.clear();
+    qc.setQueryData(SESSION_KEY, { authenticated: user !== null, user } satisfies SessionInfo);
+    useUiStore.setState({ portfolioId: null });
+  };
+}
+
+export function useLogin() {
+  const reset = useResetOnAuthChange();
+  return useMutation({
+    mutationFn: (payload: CredentialsIn) => api.post<User>("/auth/login", payload),
+    onSuccess: (user) => reset(user),
+  });
+}
+
+export function useRegister() {
+  const reset = useResetOnAuthChange();
+  return useMutation({
+    mutationFn: (payload: CredentialsIn) => api.post<User>("/auth/register", payload),
+    onSuccess: (user) => reset(user),
+  });
+}
+
+export function useLogout() {
+  const reset = useResetOnAuthChange();
+  return useMutation({
+    mutationFn: () => api.post<void>("/auth/logout"),
+    onSuccess: () => reset(null),
+  });
+}
 
 // ---------------------------------------------------------------- health
 export function useHealth() {

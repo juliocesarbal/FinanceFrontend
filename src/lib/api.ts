@@ -16,12 +16,29 @@ export class ApiError extends Error {
   }
 }
 
+/** Métodos que Django somete al chequeo CSRF de la sesión. */
+const MUTATING_METHODS = new Set(["POST", "PATCH", "PUT", "DELETE"]);
+
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const method = (init?.method ?? "GET").toUpperCase();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (MUTATING_METHODS.has(method)) {
+    // La cookie csrftoken la siembra GET /auth/me (la primera carga siempre pasa por ahí).
+    const csrf = getCookie("csrftoken");
+    if (csrf) headers["X-CSRFToken"] = csrf;
+  }
   let res: Response;
   try {
     res = await fetch(`${BASE}${path}`, {
-      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
       ...init,
+      headers: { ...headers, ...(init?.headers as Record<string, string> | undefined) },
     });
   } catch {
     throw new ApiError(

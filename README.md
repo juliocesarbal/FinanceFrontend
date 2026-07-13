@@ -41,6 +41,7 @@ otra dirección, copiá `.env.example` a `.env` y ajustá `BACKEND_URL`.
 
 | Ruta | Contenido |
 |---|---|
+| `/login` · `/register` | Inicio de sesión y alta de cuenta (email + contraseña). El resto del dashboard exige sesión: sin login se redirige acá |
 | `/` | Dashboard: salud del sistema (incl. métrica 429 de yfinance), top del ranking, watchlist, últimas noticias |
 | `/mercado` | Universo de activos, filtro por tipo, alta de tickers nuevos |
 | `/mercado/[ticker]` | Velas + SMA 20/50/200 + volumen, y pestañas: técnico (RSI/MACD), fundamentales (5 bloques de la sección 4.3), noticias, consenso de analistas, riesgo, recomendación |
@@ -66,8 +67,17 @@ npm run build
 npm start
 ```
 
+## Autenticación
+
+Sesión de Django por cookies (same-origin gracias al proxy, sin JWT ni CORS).
+`AppShell` consulta `GET /api/auth/me` al cargar: si no hay sesión redirige a
+`/login`; el cliente HTTP (`lib/api.ts`) manda `X-CSRFToken` (leído de la cookie
+`csrftoken`) en cada mutación, y ante cualquier 401 se vuelve al login. Carteras
+y simulaciones son **por usuario**: al cambiar de cuenta se limpia la caché de
+TanStack Query.
+
 ## Pendientes conocidos
 
-- Autenticación: la API hoy es single-user y sin auth (llega con el backend).
+- Recuperación/cambio de contraseña y verificación de email.
 - WebSockets (Django Channels) para precios/alertas en vivo — roadmap V7; hoy
   TanStack Query refresca por intervalos/interacción.

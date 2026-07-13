@@ -1,15 +1,19 @@
-/** Barra superior: buscador de ticker + estado de salud del backend. */
+/** Barra superior: buscador de ticker + salud del backend + sesión. */
 "use client";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { useHealth } from "@/lib/queries";
+import { Button } from "@/components/ui/primitives";
+import { useHealth, useLogout, useSession } from "@/lib/queries";
 
 export function Topbar() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const health = useHealth();
+  const session = useSession();
+  const logout = useLogout();
+  const email = session.data?.user?.email;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +49,22 @@ export function Topbar() {
       <div className="flex items-center gap-2 text-xs text-muted" title={statusText}>
         <span className={`h-2 w-2 rounded-full ${statusColor}`} aria-hidden />
         <span className="hidden sm:inline">{statusText}</span>
+      </div>
+      <div className="flex shrink-0 items-center gap-2">
+        {email && (
+          <span className="hidden max-w-[18ch] truncate text-xs text-muted lg:inline" title={email}>
+            {email}
+          </span>
+        )}
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+          title="Cerrar sesión"
+        >
+          {logout.isPending ? "Saliendo…" : "Salir"}
+        </Button>
       </div>
     </header>
   );

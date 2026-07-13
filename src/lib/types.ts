@@ -460,3 +460,19 @@ export interface Health {
   cache: boolean;
   yfinance_rate_limit_errors: number;
 }
+
+// ---------------------------------------------------------------- auth
+export interface User {
+  id: number;
+  email: string;
+}
+
+export interface SessionInfo {
+  authenticated: boolean;
+  user: User | null;
+}
+
+export interface CredentialsIn {
+  email: string;
+  password: string;
+}
