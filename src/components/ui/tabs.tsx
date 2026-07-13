@@ -1,36 +1,3 @@
-/** Control segmentado simple para alternar vistas. */
+/** Control segmentado accesible para alternar vistas. */
 "use client";
-
-export function Tabs<T extends string>({
-  value,
-  onChange,
-  options,
-}: {
-  value: T;
-  onChange: (v: T) => void;
-  options: { value: T; label: string }[];
-}) {
-  return (
-    <div
-      role="tablist"
-      className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-lg border border-line bg-surface-1 p-1"
-    >
-      {options.map((opt) => {
-        const active = opt.value === value;
-        return (
-          <button
-            key={opt.value}
-            role="tab"
-            aria-selected={active}
-            onClick={() => onChange(opt.value)}
-            className={`whitespace-nowrap rounded-md px-3 py-1 text-xs font-medium transition-colors ${
-              active ? "bg-surface-2 text-ink" : "text-muted hover:text-ink-2"
-            }`}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
+export function Tabs<T extends string>({ value, onChange, options }: { value: T; onChange: (value: T) => void; options: { value: T; label: string }[] }) { return <div role="tablist" aria-label="Cambiar vista" className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-line bg-surface-0 p-1">{options.map((option) => { const active = option.value === value; return <button key={option.value} type="button" role="tab" aria-selected={active} tabIndex={active ? 0 : -1} onClick={() => onChange(option.value)} className={`min-h-9 whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors ${active ? "bg-surface-2 text-ink shadow-sm" : "text-muted hover:bg-surface-1 hover:text-ink-2"}`}>{option.label}</button>; })}</div>; }

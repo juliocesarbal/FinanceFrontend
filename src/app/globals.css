@@ -1,111 +1,68 @@
 @import "tailwindcss";
 
-/*
- * Tema oscuro único del dashboard financiero.
- * Paleta de datos validada con el validador de dataviz (modo dark,
- * superficie #1a1a19): slots categóricos, estados y tinta.
- */
 @theme {
-  --color-surface-0: #0d0d0d; /* plano de página */
-  --color-surface-1: #1a1a19; /* tarjetas / superficie de gráficos */
-  --color-surface-2: #242422; /* hover / insets */
-  --color-ink: #ffffff;
-  --color-ink-2: #c3c2b7;
-  --color-muted: #898781;
-  --color-grid: #2c2c2a;
-  --color-baseline: #383835;
-  --color-line: rgba(255, 255, 255, 0.1);
+  --color-surface-0: #090b0f;
+  --color-surface-1: #11151b;
+  --color-surface-2: #181e26;
+  --color-ink: #f5f7fa;
+  --color-ink-2: #c6cdd7;
+  --color-muted: #858f9d;
+  --color-grid: #202832;
+  --color-baseline: #2c3744;
+  --color-line: #27313c;
 
-  /* slots categóricos (dark) — orden fijo, nunca ciclar */
-  --color-s1: #3987e5; /* azul */
-  --color-s2: #199e70; /* aqua */
-  --color-s3: #c98500; /* amarillo */
-  --color-s4: #008300; /* verde */
-  --color-s5: #9085e9; /* violeta */
-  --color-s6: #e66767; /* rojo */
+  --color-s1: #2f81f7;
+  --color-s2: #28a888;
+  --color-s3: #d49b35;
+  --color-s4: #3ca65a;
+  --color-s5: #8a83df;
+  --color-s6: #de6b6b;
 
-  /* estados (reservados, nunca como series) */
-  --color-good: #0ca30c;
-  --color-warn: #fab219;
-  --color-serious: #ec835a;
-  --color-critical: #d03b3b;
-  /* rojo legible para texto sobre superficie oscura */
-  --color-critical-text: #e66767;
+  --color-good: #3fb950;
+  --color-warn: #d9a441;
+  --color-serious: #dd8252;
+  --color-critical: #da4f55;
+  --color-critical-text: #f07b80;
 
   --font-sans: system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
-  /* landing: serif display + mono técnica (cargadas vía next/font en layout) */
   --font-display: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-:root {
-  color-scheme: dark;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-html,
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+html, body { min-height: 100%; }
 body {
-  height: 100%;
-}
-
-/* ------------------------------------------------ utilidades de la landing */
-.text-stroke {
-  -webkit-text-stroke: 1px currentColor;
-  -webkit-text-fill-color: transparent;
-}
-
-.marquee {
-  animation: marquee 32s linear infinite;
-}
-.marquee-reverse {
-  animation: marquee-reverse 26s linear infinite;
-}
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-@keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-
-.animate-step-progress {
-  animation: step-progress 6s linear forwards;
-}
-@keyframes step-progress {
-  from { width: 0%; }
-  to { width: 100%; }
-}
-
-body {
-  background-color: var(--color-surface-0);
+  margin: 0;
+  background: var(--color-surface-0);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 0.875rem;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* números alineables en tablas y ejes */
-.num {
-  font-variant-numeric: tabular-nums;
-}
+::selection { background: color-mix(in srgb, var(--color-s1) 38%, transparent); color: var(--color-ink); }
+:focus-visible { outline: 2px solid var(--color-s1); outline-offset: 2px; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button, a { touch-action: manipulation; }
+.num { font-variant-numeric: tabular-nums; }
 
-/* barra de desplazamiento discreta */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #383835 transparent;
-}
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-*::-webkit-scrollbar-thumb {
-  background: #383835;
-  border-radius: 4px;
-}
-*::-webkit-scrollbar-track {
-  background: transparent;
+.text-stroke { -webkit-text-stroke: 1px currentColor; -webkit-text-fill-color: transparent; }
+.marquee { animation: marquee 32s linear infinite; }
+.marquee-reverse { animation: marquee-reverse 26s linear infinite; }
+.animate-step-progress { animation: step-progress 6s linear forwards; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-reverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes step-progress { from { width: 0%; } to { width: 100%; } }
+
+* { scrollbar-width: thin; scrollbar-color: var(--color-baseline) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--color-baseline); border-radius: 999px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

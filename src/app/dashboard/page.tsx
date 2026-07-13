@@ -14,6 +14,7 @@ import {
   EmptyState,
   ErrorBox,
   Loading,
+  PageHeader,
   ScoreChip,
   Stat,
   Table,
@@ -31,12 +32,16 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-lg font-bold tracking-tight">Dashboard</h1>
-        <p className="text-xs text-muted">
-          Sistema Inteligente de Análisis, Simulación y Descubrimiento de Inversiones
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Centro de control"
+        title="Resumen de inversión"
+        description="Seguimiento operativo del universo, señales recientes y salud de las fuentes de datos."
+        actions={
+          <Link href="/mercado" className="rounded-lg border border-line bg-surface-1 px-3 py-2 text-xs font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
+            Explorar mercado <span aria-hidden>→</span>
+          </Link>
+        }
+      />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat

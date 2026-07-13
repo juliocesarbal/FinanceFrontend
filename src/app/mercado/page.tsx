@@ -15,6 +15,7 @@ import {
   EmptyState,
   ErrorBox,
   Loading,
+  PageHeader,
   Spinner,
   Table,
   Td,
@@ -36,26 +37,17 @@ export default function MercadoPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-lg font-bold tracking-tight">Mercado</h1>
-          <p className="text-xs text-muted">
-            Monitor de activos (sección 4.1) — precios vía yfinance con caché
-          </p>
-        </div>
-        <form onSubmit={submit} className="flex items-center gap-2">
-          <Input
-            value={newTicker}
-            onChange={(e) => setNewTicker(e.target.value)}
-            placeholder="Agregar ticker (p. ej. AMZN)"
-            className="w-48"
-            aria-label="Nuevo ticker"
-          />
-          <Button type="submit" variant="primary" disabled={createAsset.isPending}>
-            {createAsset.isPending ? <Spinner /> : "Agregar"}
-          </Button>
-        </form>
-      </div>
+      <PageHeader
+        eyebrow="Universo de inversión"
+        title="Mercado"
+        description="Monitor de activos y precios con datos en caché, organizado para comparar y profundizar rápidamente."
+        actions={
+          <form onSubmit={submit} className="flex w-full items-center gap-2 sm:w-auto">
+            <Input value={newTicker} onChange={(e) => setNewTicker(e.target.value)} placeholder="Agregar ticker (p. ej. AMZN)" className="min-w-0 sm:w-56" aria-label="Nuevo ticker" autoComplete="off" />
+            <Button type="submit" variant="primary" disabled={createAsset.isPending}>{createAsset.isPending ? <Spinner /> : "Agregar"}</Button>
+          </form>
+        }
+      />
 
       {createAsset.isError && <ErrorBox error={createAsset.error} />}
 
